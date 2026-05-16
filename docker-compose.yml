@@ -61,5 +61,13 @@ services:
       kafka:
         condition: service_started
 
+  notification-service:
+    build:
+      context: ./backend/services/notification-service
+    env_file: .env
+    depends_on:
+      kafka:
+        condition: service_started
+
 volumes:
   postgres-data:
