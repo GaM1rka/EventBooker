@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"log/slog"
+	"time"
 
 	"github.com/segmentio/kafka-go"
 
@@ -48,7 +49,11 @@ func (c *Consumer) Run(ctx context.Context) error {
 				c.logger.Info("Kafka consumer stopped by context")
 				return err
 			}
-			return err
+			c.logger.Error("failed to fetch Kafka message, retrying", "error", err)
+			if err := waitForRetry(ctx, 2*time.Second); err != nil {
+				return err
+			}
+			continue
 		}
 
 		c.logger.Info("Kafka message received", "topic", msg.Topic, "partition", msg.Partition, "offset", msg.Offset)
@@ -78,4 +83,16 @@ func (c *Consumer) Run(ctx context.Context) error {
 func (c *Consumer) Close() error {
 	c.logger.Info("closing Kafka consumer")
 	return c.reader.Close()
+}
+
+func waitForRetry(ctx context.Context, delay time.Duration) error {
+	timer := time.NewTimer(delay)
+	defer timer.Stop()
+
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-timer.C:
+		return nil
+	}
 }
