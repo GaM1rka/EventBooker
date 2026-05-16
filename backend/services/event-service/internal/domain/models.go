@@ -30,3 +30,16 @@ type Booking struct {
 	ConfirmedAt *time.Time    `json:"confirmedAt,omitempty"`
 	CreatedAt   time.Time     `json:"createdAt"`
 }
+
+type EventDetails struct {
+	Event          Event     `json:"event"`
+	FreeSeats      int       `json:"freeSeats"`
+	PendingCount   int       `json:"pendingCount"`
+	ConfirmedCount int       `json:"confirmedCount"`
+	Bookings       []Booking `json:"bookings"`
+}
+
+type ExpiredBooking struct {
+	Booking
+	EventTitle string `json:"eventTitle"`
+}

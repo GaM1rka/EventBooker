@@ -8,7 +8,13 @@ CREATE TABLE IF NOT EXISTS events (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TYPE booking_status AS ENUM ('pending', 'confirmed', 'canceled');
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'booking_status') THEN
+        CREATE TYPE booking_status AS ENUM ('pending', 'confirmed', 'canceled');
+    END IF;
+END
+$$;
 
 CREATE TABLE IF NOT EXISTS bookings (
     id BIGSERIAL PRIMARY KEY,
