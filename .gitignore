@@ -1,0 +1,7 @@
+.env
+**/.env
+bin/
+dist/
+node_modules/
+postgres-data/
+*.log
