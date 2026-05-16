@@ -69,5 +69,14 @@ services:
       kafka:
         condition: service_started
 
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+    depends_on:
+      event-api:
+        condition: service_started
+
 volumes:
   postgres-data:

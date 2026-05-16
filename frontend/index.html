@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EventBooker</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>EventBooker</h1>
+        <p>Бронирования с дедлайнами оплаты</p>
+      </div>
+      <div class="api-box">
+        <label for="apiUrl">API</label>
+        <input id="apiUrl" type="url" value="http://localhost:8080">
+        <button id="saveApi" type="button">OK</button>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Разделы">
+      <button class="tab is-active" type="button" data-tab="user">Пользователь</button>
+      <button class="tab" type="button" data-tab="admin">Администратор</button>
+    </nav>
+
+    <main>
+      <section id="userTab" class="tab-panel">
+        <div class="section-head">
+          <h2>Мероприятия</h2>
+          <button id="refreshUser" type="button">Обновить</button>
+        </div>
+
+        <form id="bookingForm" class="toolbar">
+          <input id="userName" type="text" placeholder="Имя" required>
+          <input id="userEmail" type="email" placeholder="Email" required>
+          <span id="lastBooking" class="status-text">Бронь пока не выбрана</span>
+        </form>
+
+        <div id="userEvents" class="event-grid"></div>
+      </section>
+
+      <section id="adminTab" class="tab-panel is-hidden">
+        <div class="section-head">
+          <h2>Администрирование</h2>
+          <button id="refreshAdmin" type="button">Обновить</button>
+        </div>
+
+        <form id="createEventForm" class="create-form">
+          <label>
+            Название
+            <input name="title" type="text" placeholder="Go workshop" required>
+          </label>
+          <label>
+            Дата
+            <input name="eventDate" type="datetime-local" required>
+          </label>
+          <label>
+            Мест
+            <input name="capacity" type="number" min="1" value="10" required>
+          </label>
+          <label>
+            TTL брони, минут
+            <input name="bookingTtlMinutes" type="number" min="1" value="2" required>
+          </label>
+          <label class="checkbox-line">
+            <input name="requiresPayment" type="checkbox" checked>
+            Требует подтверждения
+          </label>
+          <button type="submit">Создать</button>
+        </form>
+
+        <div id="adminEvents" class="event-list"></div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
